@@ -45,7 +45,7 @@
           </v-icon>
         </template>
         <template v-slot:no-data>
-          <v-btn color="primary" @click="initialize"> Reset </v-btn>
+          <div>ไม่มีสินค้าในตะกร้า</div>
         </template>
       </v-data-table>
     </v-col>
@@ -127,18 +127,17 @@ export default {
           amout: 1,
           total: 100,
         },
+        {
+          image:
+            "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
+          orders: "ส้มแขก",
+          price: 200,
+          amout: 1,
+          total: 100,
+        },
       ],
       min: 0,
     };
-  },
-  watch: {
-    "item.amout": {
-      handler() {
-        console.log("item.amout");
-        item.total = item.amout * item.total;
-      },
-      deep: true,
-    },
   },
   methods: {
     plus(item) {
@@ -157,7 +156,10 @@ export default {
         item.total = item.price * item.amout;
       }
     },
-    deleteItem(item) {},
+    deleteItem(item) {
+      // console.log(item);
+      this.items.splice(item, 1);
+    },
   },
 };
 </script>
