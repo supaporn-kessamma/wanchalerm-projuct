@@ -7,9 +7,9 @@
       <v-row>
         <v-col
           cols="4"
-          v-for="(product, idx) in products"
+          v-for="(product, idx) in filterList"
           :key="idx"
-          class="px-0"
+          class="pr-0 mx-0"
         >
           <v-card elevation="2" max-width="230" class="pa-2">
             <v-row align="center" justify="center">
@@ -45,22 +45,27 @@
           <div class="text-center">ประเภทสินค้า</div>
         </v-col>
         <v-col cols="12">
-          <v-btn block>เครื่องดื่ม</v-btn>
+          <v-btn block @click="filterProduct(false)">ทั้งหมด</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block>ยา</v-btn>
+          <v-btn block @click="filterProduct('drink')">เครื่องดื่ม</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block>อาหาร</v-btn>
+          <v-btn block @click="filterProduct('drug')">ยา</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block>สมุนไพร</v-btn>
+          <v-btn block @click="filterProduct('food')">อาหาร</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block>เครื่องดื่ม(ไม่มีแอลกอฮอล์)</v-btn>
+          <v-btn block @click="filterProduct('herb')">สมุนไพร</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block>เสื้อผ้า</v-btn>
+          <v-btn block @click="filterProduct('noAlcohol')"
+            >เครื่องดื่ม(ไม่มีแอลกอฮอล์)</v-btn
+          >
+        </v-col>
+        <v-col cols="12">
+          <v-btn block @click="filterProduct('clothes')">เสื้อผ้า</v-btn>
         </v-col>
       </v-row>
     </v-col>
@@ -68,6 +73,8 @@
 </template>
 
 <script>
+import _filter from "lodash/filter";
+
 export default {
   data() {
     return {
@@ -76,41 +83,68 @@ export default {
         {
           image:
             "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้ม",
+          name: "ส้ม (อาหาร)",
           price: 100,
           amout: 1,
           total: 100,
+          category: "food",
         },
         {
           image:
             "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้มแขก",
+          name: "ส้มแขก (อาหาร)",
           price: 100,
           amout: 1,
           total: 100,
+          category: "food",
         },
         {
           image:
             "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้มเชื่อม",
+          name: "ส้มเชื่อม (สมุนไพร)",
           price: 100,
           amout: 1,
           total: 100,
+          category: "herb",
         },
         {
           image:
             "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้มกล่อง",
+          name: "ส้มกล่อง (เครื่องดื่ม)",
           price: 100,
           amout: 1,
           total: 100,
+          category: "drink",
         },
       ],
+      filter: "",
+      filterList: [],
     };
+  },
+  mounted() {
+    this.filterList = this.products;
+  },
+  watch: {
+    filter: {
+      handler() {
+        this.filterList = _filter(this.products, ["category", this.filter]);
+        if (this.filter) {
+          console.log("this.filter", typeof this.filter);
+          this.filterList = _filter(this.products, ["category", this.filter]);
+        } else {
+          console.log("this.filter", this.filter);
+          this.filterList = _filter(this.products, "category");
+        }
+      },
+      deep: true,
+    },
   },
   methods: {
     addProduct(item) {
       console.log(item);
+    },
+    filterProduct(text) {
+      this.filter = text;
     },
   },
 };
