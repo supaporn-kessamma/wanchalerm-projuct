@@ -64,56 +64,102 @@
     </v-col>
     <v-col cols="3">
       <v-card outlined tile class="pa-2">
-        <v-row>
-          <v-col cols="12">
-            <h2>ที่อยู่จัดส่ง</h2>
-          </v-col>
-          <v-col cols="12">
-            <span>ชื่อ - นามสกุล</span>
-          </v-col>
-          <v-col cols="12" class="pt-0">
-            <v-text-field outlined dense hide-details />
-          </v-col>
-          <v-col cols="12" class="pt-0">
-            <span>ที่อยู่</span>
-          </v-col>
-          <v-col cols="12" class="pt-0">
-            <v-text-field outlined dense hide-details />
-          </v-col>
-          <v-col cols="6" class="pt-0">
-            <span>เมือง</span>
-          </v-col>
-          <v-col cols="6" class="pt-0">
-            <span>จังหวัด</span>
-          </v-col>
-          <v-col cols="6" class="pt-0">
-            <v-text-field outlined dense hide-details />
-          </v-col>
-          <v-col cols="6" class="pt-0">
-            <v-text-field outlined dense hide-details />
-          </v-col>
-          <v-col cols="6" class="pt-0">
-            <span>ประเทศ</span>
-          </v-col>
-          <v-col cols="6" class="pt-0">
-            <span>รหัสไปรษณีย์</span>
-          </v-col>
-          <v-col cols="6" class="pt-0">
-            <v-text-field outlined dense hide-details />
-          </v-col>
-          <v-col cols="6" class="pt-0">
-            <v-text-field outlined dense hide-details />
-          </v-col>
-          <v-col cols="12" class="pt-0">
-            <span>เบอร์โทรศัพท์</span>
-          </v-col>
-          <v-col cols="12" class="pt-0">
-            <v-text-field outlined dense hide-details />
-          </v-col>
-          <v-col cols="12">
-            <v-btn block color="green" class="white--text">สั่งสินค้า</v-btn>
-          </v-col>
-        </v-row>
+        <v-form v-model="valid">
+          <v-row>
+            <v-col cols="12">
+              <h2>ที่อยู่จัดส่ง</h2>
+            </v-col>
+            <v-col cols="12">
+              <span>ชื่อ - นามสกุล</span>
+            </v-col>
+            <v-col cols="12" class="pt-0">
+              <v-text-field
+                outlined
+                dense
+                hide-details
+                v-model="form.name"
+                required
+              />
+            </v-col>
+            <v-col cols="12" class="pt-0">
+              <span>ที่อยู่</span>
+            </v-col>
+            <v-col cols="12" class="pt-0">
+              <v-text-field
+                outlined
+                dense
+                hide-details
+                v-model="form.address"
+                required
+              />
+            </v-col>
+            <v-col cols="6" class="pt-0">
+              <span>เมือง</span>
+            </v-col>
+            <v-col cols="6" class="pt-0">
+              <span>จังหวัด</span>
+            </v-col>
+            <v-col cols="6" class="pt-0">
+              <v-text-field
+                outlined
+                dense
+                hide-details
+                v-model="form.city"
+                required
+              />
+            </v-col>
+            <v-col cols="6" class="pt-0">
+              <v-text-field
+                outlined
+                dense
+                hide-details
+                v-model="form.province"
+                required
+              />
+            </v-col>
+            <v-col cols="6" class="pt-0">
+              <span>ประเทศ</span>
+            </v-col>
+            <v-col cols="6" class="pt-0">
+              <span>รหัสไปรษณีย์</span>
+            </v-col>
+            <v-col cols="6" class="pt-0">
+              <v-text-field
+                outlined
+                dense
+                hide-details
+                v-model="form.country"
+                required
+              />
+            </v-col>
+            <v-col cols="6" class="pt-0">
+              <v-text-field
+                outlined
+                dense
+                hide-details
+                v-model="form.zip"
+                required
+              />
+            </v-col>
+            <v-col cols="12" class="pt-0">
+              <span>เบอร์โทรศัพท์</span>
+            </v-col>
+            <v-col cols="12" class="pt-0">
+              <v-text-field
+                outlined
+                dense
+                hide-details
+                v-model="form.tel"
+                required
+              />
+            </v-col>
+            <v-col cols="12">
+              <v-btn block color="green" class="white--text" @click="submit"
+                >สั่งสินค้า</v-btn
+              >
+            </v-col>
+          </v-row>
+        </v-form>
       </v-card>
     </v-col>
   </v-row>
@@ -121,9 +167,11 @@
 
 <script>
 import _sumBy from "lodash/sumBy";
+
 export default {
   data() {
     return {
+      valid: false,
       headers: [
         { text: "รายการ", value: "image", width: 100, align: "center" },
         { text: "", value: "orders", align: "start" },
@@ -150,6 +198,15 @@ export default {
           total: 100,
         },
       ],
+      form: {
+        name: "",
+        address: "",
+        city: "",
+        province: "",
+        country: "",
+        zip: "",
+        tel: "",
+      },
       min: 0,
       sumTotal: 0,
     };
@@ -183,8 +240,33 @@ export default {
     deleteItem(item) {
       this.items.splice(item, 1);
     },
-    sum() {
-      // sumBy(objects, function(o) { return o.n; });
+    submit() {
+      try {
+        // throw new Error("0");
+        this.$swal.fire({
+          title: "สั่งซื้อสำเร็จ",
+          text: "สั่งซื้อสำเร็จ เลขออร์เดอร์ของท่านคือ #005",
+          icon: "success",
+          confirmButtonText: "ตกลง",
+        });
+        this.form = {
+          name: "",
+          address: "",
+          city: "",
+          province: "",
+          country: "",
+          zip: "",
+          tel: "",
+        };
+        this.items = [];
+      } catch (error) {
+        this.$swal.fire({
+          title: "สั่งซื้อไม่สำเร็จ",
+          text: error.message,
+          icon: "error",
+          confirmButtonText: "ตกลง",
+        });
+      }
     },
   },
 };
