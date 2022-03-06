@@ -44,6 +44,19 @@
             mdi-delete
           </v-icon>
         </template>
+        <template v-slot:body.append>
+          <tr>
+            <td colspan="3"></td>
+            <td class="text-right">
+              <h2>ราคารวมทั้งหมด</h2>
+              <div>{{ items.length }} รายการ</div>
+            </td>
+            <td></td>
+            <td>
+              <h2>{{ sumTotal }}</h2>
+            </td>
+          </tr>
+        </template>
         <template v-slot:no-data>
           <div>ไม่มีสินค้าในตะกร้า</div>
         </template>
@@ -107,6 +120,7 @@
 </template>
 
 <script>
+import _sumBy from "lodash/sumBy";
 export default {
   data() {
     return {
@@ -137,7 +151,17 @@ export default {
         },
       ],
       min: 0,
+      sumTotal: 0,
     };
+  },
+  watch: {
+    items: {
+      handler() {
+        this.sumTotal = _sumBy(this.items, "total");
+      },
+      immediate: true, //watchทำงานเริ่มต้น
+      deep: true, //ตรวจสอบข้อมูลที่ลึกขึ้น เช่น array object
+    },
   },
   methods: {
     plus(item) {
@@ -157,8 +181,10 @@ export default {
       }
     },
     deleteItem(item) {
-      // console.log(item);
       this.items.splice(item, 1);
+    },
+    sum() {
+      // sumBy(objects, function(o) { return o.n; });
     },
   },
 };
