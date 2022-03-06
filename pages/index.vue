@@ -5,7 +5,12 @@
     </v-col>
     <v-col cols="9">
       <v-row>
-        <v-col cols="4" v-for="(product, idx) in products" :key="idx">
+        <v-col
+          cols="4"
+          v-for="(product, idx) in products"
+          :key="idx"
+          class="px-0"
+        >
           <v-card elevation="2" max-width="230" class="pa-2">
             <v-row align="center" justify="center">
               <v-col cols="12">
@@ -71,7 +76,7 @@ export default {
         {
           image:
             "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้มแขก",
+          name: "ส้ม",
           price: 100,
           amout: 1,
           total: 100,
@@ -87,7 +92,7 @@ export default {
         {
           image:
             "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้มแขก",
+          name: "ส้มเชื่อม",
           price: 100,
           amout: 1,
           total: 100,
@@ -95,7 +100,7 @@ export default {
         {
           image:
             "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้มแขก",
+          name: "ส้มกล่อง",
           price: 100,
           amout: 1,
           total: 100,
