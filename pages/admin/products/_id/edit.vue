@@ -12,7 +12,7 @@
         hide-details
         outlined
         label="url รูปภาพ"
-        v-model="form.url"
+        v-model="form.img"
       />
     </v-col>
     <v-col cols="12">
@@ -48,19 +48,15 @@
 </template>
 
 <script>
+import ProductService from "@/services/apis/Product";
 export default {
-  asyncData({ route }) {
-    const { item } = route.query;
-    return {
-      item,
-    };
-  },
   data() {
     return {
       form: {
+        id: "",
         name: "",
         price: 0,
-        url: "",
+        img: "",
         type: "",
       },
       types: [
@@ -73,9 +69,21 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.loadData();
+  },
   methods: {
-    add() {
+    async loadData() {
+      const data = await ProductService.getById(this.$route.params.id);
+      this.form.id = data.id;
+      this.form.name = data.name;
+      this.form.price = data.price;
+      this.form.img = data.img;
+      this.form.type = data.type;
+    },
+    async add() {
       try {
+        await ProductService.update(this.form.id, this.form);
         this.$swal.fire({
           title: "สำเร็จ",
           icon: "success",

@@ -26,12 +26,22 @@
               </v-col>
               <v-col cols="12" class="d-flex justify-end">
                 <v-card
+                  v-if="product.openButton"
                   class="px-2 py-1"
                   outlined
                   tile
                   @click="addProduct(product)"
                 >
                   <div>เพิ่มลงในตะกร้า</div>
+                </v-card>
+                <v-card
+                  v-else
+                  class="px-2 py-1"
+                  style="background: #7777"
+                  outlined
+                  tile
+                >
+                  <div>เพิ่มแล้ว</div>
                 </v-card>
               </v-col>
             </v-row>
@@ -87,14 +97,29 @@ export default {
     };
   },
   async mounted() {
-    const { data } = await ProductService.getAll({});
-    this.products = data;
+    if (!this.$auth.user) {
+      window.location.href = "/login";
+    }
 
-<<<<<<< HEAD
-    const { data } = await ProductService.getAll({})
-=======
+    const { data } = await ProductService.getAll();
+    const { data: carts } = await CartService.getAll({
+      "filters[user_id]": this.$auth.user.id,
+      "filters[status]": "ดำเนินการ",
+    });
+
+    this.products = data;
+    for (const i in this.products) {
+      if (carts.length) {
+        const isTrue = carts.filter(
+          (o) => o.product_id === this.products[i].id
+        );
+        this.products[i].openButton = isTrue.length ? false : true;
+      } else {
+        this.products[i].openButton = true;
+      }
+    }
+
     this.filterList = this.products;
->>>>>>> 5bdc1f0a6b3a95854ab71599931b613bbe4c9119
   },
   watch: {
     filter: {
@@ -111,9 +136,15 @@ export default {
   },
   methods: {
     async addProduct(item) {
+      if (!this.$auth.user) window.location.href = "/login";
+
       try {
-        await CartService.create({ product_id: item.id, amount: 1 });
-        console.log(item);
+        await CartService.create({
+          product_id: item.id,
+          amount: 1,
+          status: "ดำเนินการ",
+          user_id: this.$auth.user.id,
+        });
 
         location.reload();
       } catch (e) {

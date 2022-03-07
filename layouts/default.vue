@@ -48,6 +48,7 @@
 </template>
 
 <script>
+import CartService from "@/services/apis/Cart";
 export default {
   name: "DefaultLayout",
   data() {
@@ -80,11 +81,6 @@ export default {
           title: "ตะกร้าสินค้า",
           to: "/cart",
         },
-        {
-          icon: "mdi-cog",
-          title: "จัดการข้อมูล",
-          to: "/admin",
-        },
       ],
       miniVariant: false,
       right: true,
@@ -93,7 +89,13 @@ export default {
     };
   },
   watch: {},
-  mounted() {
+  async mounted() {
+    const { data: carts } = await CartService.getAll({
+      "filters[user_id]": this.$auth.user.id,
+      "filters[status]": "ดำเนินการ",
+    });
+    this.count = carts.length;
+
     this.loadNav();
   },
   methods: {
@@ -105,8 +107,8 @@ export default {
       if (this.$auth.user) {
         if (this.$auth.user.role_id === 1) {
           this.items.push({
-            icon: "mdi-login-variant",
-            title: "หน้าจัดการ",
+            icon: "mdi-cog",
+            title: "จัดการข้อมูล",
             to: "/admin",
           });
         }
