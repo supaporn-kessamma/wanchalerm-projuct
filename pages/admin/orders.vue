@@ -54,17 +54,19 @@
 </template>
 
 <script>
+import OrderService from "@/services/apis/Order"
+
 export default {
   data() {
     return {
       headers: [
         { text: "สถานะ", value: "status", align: "center" },
-        { text: "เลขออร์", value: "no", align: "center" },
+        { text: "เลขออร์", value: "id", align: "center" },
         { text: "ชื่อผู้สั่ง", value: "name", width: 150, align: "center" },
         { text: "ที่อยู่", value: "address", width: 300, align: "center" },
-        { text: "รายการ", value: "image", width: 100, align: "center" },
+        { text: "รายการ", value: "img", width: 100, align: "center" },
         { text: "", value: "orders", width: 100, align: "start" },
-        { text: "จำนวน", value: "amout", align: "center" },
+        { text: "จำนวน", value: "carts.length", align: "center" },
         { text: "ราคารวม", value: "total", align: "center" },
         { text: "ตัวเลือก", value: "actions", sortable: false },
       ],
@@ -98,7 +100,15 @@ export default {
       ],
     };
   },
+  mounted(){
+    this.loadOrder()
+  },
   methods: {
+    async loadOrder(){
+      const {data} = await OrderService.getAll()
+      this.items = data
+      console.log(data)
+    },
     deleteItem(item) {
       this.$swal
         .fire({

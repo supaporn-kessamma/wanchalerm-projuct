@@ -68,15 +68,17 @@ export default {
           title: "ตะกร้าสินค้า",
           to: "/cart",
         },
+      ],
+      itemsTemp: [
         {
-          icon: "mdi-account-multiple",
-          title: "สมัครสมาชิก",
-          to: "/register",
+          icon: "mdi-home-outline",
+          title: "หน้าหลัก",
+          to: "/",
         },
         {
-          icon: "mdi-login-variant",
-          title: "เข้าสู่ระบบ",
-          to: "/login",
+          icon: "mdi-cart-outline",
+          title: "ตะกร้าสินค้า",
+          to: "/cart",
         },
         {
           icon: "mdi-cog",
@@ -89,6 +91,43 @@ export default {
       rightDrawer: false,
       title: "Vuetify.js",
     };
+  },
+  watch: {},
+  mounted() {
+    this.loadNav();
+  },
+  methods: {
+    async loadNav() {
+      this.items = await [];
+      const temp = this.itemsTemp;
+      this.items = temp;
+
+      if (this.$auth.user) {
+        if (this.$auth.user.role_id === 1) {
+          this.items.push({
+            icon: "mdi-login-variant",
+            title: "หน้าจัดการ",
+            to: "/admin",
+          });
+        }
+        this.items.push({
+          icon: "mdi-login-variant",
+          title: "ออกจากระบบ",
+          to: "/logout",
+        });
+      } else {
+        this.items.push({
+          icon: "mdi-account-multiple",
+          title: "สมัครสมาชิก",
+          to: "/register",
+        });
+        this.items.push({
+          icon: "mdi-login-variant",
+          title: "เข้าสู่ระบบ",
+          to: "/login",
+        });
+      }
+    },
   },
 };
 </script>

@@ -41,16 +41,23 @@ export default {
       },
     };
   },
-  
+
   methods: {
-    register() {
+    async register() {
       try {
+        await this.$auth.loginWith("local", {
+          data: {
+            username: this.form.username,
+            password: this.form.password,
+          },
+        });
+
         this.$swal.fire({
           title: "เข้าสู่ระบบสำเร็จ",
           icon: "success",
           confirmButtonText: "ตกลง",
         });
-        this.$router.push("/");
+        window.location.href = "/";
       } catch (error) {
         this.$swal.fire({
           title: "เข้าสู่ระบบไม่สำเร็จ",

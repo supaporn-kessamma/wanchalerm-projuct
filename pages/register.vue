@@ -50,6 +50,7 @@
 </template>
 
 <script>
+import UserService from "@/services/apis/User";
 export default {
   data() {
     return {
@@ -62,13 +63,26 @@ export default {
     };
   },
   methods: {
-    register() {
+    async register() {
       try {
+        await UserService.create({
+          full_name: this.form.firstName + this.form.lastName,
+          username: this.form.username,
+          password: this.form.password,
+        });
+        await this.$auth.loginWith("local", {
+          data: {
+            username: this.form.username,
+            password: this.form.password,
+          },
+        });
+
         this.$swal.fire({
-          title: "สมัครสมาชิกสำเร็จ",
+          title: "เข้าสู่ระบบสำเร็จ",
           icon: "success",
           confirmButtonText: "ตกลง",
         });
+        window.location.href = "/";
         this.$router.push("/");
       } catch (error) {
         this.$swal.fire({

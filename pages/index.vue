@@ -90,7 +90,11 @@ export default {
     const { data } = await ProductService.getAll({});
     this.products = data;
 
+<<<<<<< HEAD
+    const { data } = await ProductService.getAll({})
+=======
     this.filterList = this.products;
+>>>>>>> 5bdc1f0a6b3a95854ab71599931b613bbe4c9119
   },
   watch: {
     filter: {
