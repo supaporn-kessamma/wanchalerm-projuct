@@ -29,9 +29,9 @@
       <v-spacer></v-spacer>
 
       <v-badge bordered color="red" :content="count" :value="count">
-        <!-- <v-btn icon> -->
-        <v-icon>mdi-cart-outline</v-icon>
-        <!-- </v-btn> -->
+        <v-btn icon to="/cart">
+          <v-icon>mdi-cart-outline</v-icon>
+        </v-btn>
       </v-badge>
     </v-app-bar>
 
@@ -77,6 +77,11 @@ export default {
           icon: "mdi-login-variant",
           title: "เข้าสู่ระบบ",
           to: "/login",
+        },
+        {
+          icon: "mdi-cog",
+          title: "จัดการข้อมูล",
+          to: "/admin",
         },
       ],
       miniVariant: false,
