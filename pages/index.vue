@@ -126,7 +126,6 @@ export default {
     this.filterList = this.products;
 
     const { data } = await ProductService.getAll({})
-    console.log(data)
   },
   watch: {
     filter: {

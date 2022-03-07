@@ -44,6 +44,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
+    '@nuxtjs/auth',
     '@nuxtjs/axios',
   ],
 
@@ -53,6 +54,37 @@ export default {
     headers: {
       common: {
         Accept: 'application/json',
+      },
+    },
+  },
+
+  auth: {
+    redirect: {
+      login: '/login',
+      logout: '/',
+      callback: '/login',
+      home: '/',
+    },
+    // Options
+    strategies: {
+      local: {
+        endpoints: {
+          login: {
+            url: '/v1/login',
+            method: 'post',
+            propertyName: 'data.token',
+          },
+          logout: {
+            url: '/v1/logout',
+            method: 'post',
+            propertyName: 'data',
+          },
+          user: {
+            url: '/v1/users/me',
+            method: 'get',
+            propertyName: 'data',
+          },
+        },
       },
     },
   },
