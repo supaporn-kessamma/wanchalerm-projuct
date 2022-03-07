@@ -14,7 +14,7 @@
           <v-chip
             color="green"
             class="white--text"
-            v-if="item.status === 'success'"
+            v-if="item.status === 'สำเร็จ'"
             >สำเร็จ</v-chip
           >
           <v-chip color="orange" class="white--text" v-else>รอการยืนยัน</v-chip>
@@ -54,21 +54,30 @@
 </template>
 
 <script>
-import OrderService from "@/services/apis/Order"
+import OrderService from "@/services/apis/Order";
 
 export default {
   data() {
     return {
       headers: [
-        { text: "สถานะ", value: "status", align: "center" },
         { text: "เลขออร์", value: "id", align: "center" },
-        { text: "ชื่อผู้สั่ง", value: "name", width: 150, align: "center" },
+        {
+          text: "ชื่อผู้สั่ง",
+          value: "user.full_name",
+          width: 150,
+          align: "center",
+        },
+        {
+          text: "รายการ",
+          value: "carts.0.product.name",
+          width: 100,
+          align: "center",
+        },
         { text: "ที่อยู่", value: "address", width: 300, align: "center" },
-        { text: "รายการ", value: "img", width: 100, align: "center" },
         { text: "", value: "orders", width: 100, align: "start" },
         { text: "จำนวน", value: "carts.length", align: "center" },
-        { text: "ราคารวม", value: "total", align: "center" },
-        { text: "ตัวเลือก", value: "actions", sortable: false },
+        { text: "ราคารวม", value: "paid", align: "center" },
+        { text: "สถานะ", value: "status", align: "center" },
       ],
       items: [
         {
@@ -100,14 +109,20 @@ export default {
       ],
     };
   },
-  mounted(){
-    this.loadOrder()
+  mounted() {
+    if (!this.$auth.user || this.$auth.user.role_id !== 1) {
+      window.location.href = "/login";
+    }
+    this.loadOrder();
   },
   methods: {
-    async loadOrder(){
-      const {data} = await OrderService.getAll()
-      this.items = data
-      console.log(data)
+    async loadOrder() {
+      const { data } = await OrderService.getAll({
+        sort: "created_at",
+        order: "desc",
+      });
+      this.items = data;
+      console.log(data);
     },
     deleteItem(item) {
       this.$swal

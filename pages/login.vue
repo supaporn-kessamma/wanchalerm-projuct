@@ -41,7 +41,11 @@ export default {
       },
     };
   },
-
+  mounted() {
+    if (this.$auth.user) {
+      window.location.href = "/";
+    }
+  },
   methods: {
     async register() {
       try {
