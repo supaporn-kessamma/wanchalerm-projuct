@@ -90,11 +90,13 @@ export default {
   },
   watch: {},
   async mounted() {
-    const { data: carts } = await CartService.getAll({
-      "filters[user_id]": this.$auth.user.id,
-      "filters[status]": "ดำเนินการ",
-    });
-    this.count = carts.length;
+    if (this.$auth.user) {
+      const { data: carts } = await CartService.getAll({
+        "filters[user_id]": this.$auth.user.id,
+        "filters[status]": "ดำเนินการ",
+      });
+      this.count = carts.length;
+    }
 
     this.loadNav();
   },
