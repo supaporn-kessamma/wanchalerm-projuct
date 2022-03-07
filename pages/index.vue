@@ -26,7 +26,7 @@
               </v-col>
               <v-col cols="12" class="d-flex justify-end">
                 <v-card
-                  v-if="product.openButton"
+                  v-if="product.openButton || !$auth.user"
                   class="px-2 py-1"
                   outlined
                   tile
@@ -34,6 +34,7 @@
                 >
                   <div>เพิ่มลงในตะกร้า</div>
                 </v-card>
+
                 <v-card
                   v-else
                   class="px-2 py-1"
@@ -97,25 +98,24 @@ export default {
     };
   },
   async mounted() {
-    if (!this.$auth.user) {
-      window.location.href = "/login";
-    }
-
     const { data } = await ProductService.getAll();
-    const { data: carts } = await CartService.getAll({
-      "filters[user_id]": this.$auth.user.id,
-      "filters[status]": "ดำเนินการ",
-    });
-
     this.products = data;
-    for (const i in this.products) {
-      if (carts.length) {
-        const isTrue = carts.filter(
-          (o) => o.product_id === this.products[i].id
-        );
-        this.products[i].openButton = isTrue.length ? false : true;
-      } else {
-        this.products[i].openButton = true;
+
+    if (this.$auth.user) {
+      const { data: carts } = await CartService.getAll({
+        "filters[user_id]": this.$auth.user.id,
+        "filters[status]": "ดำเนินการ",
+      });
+
+      for (const i in this.products) {
+        if (carts.length) {
+          const isTrue = carts.filter(
+            (o) => o.product_id === this.products[i].id
+          );
+          this.products[i].openButton = isTrue.length ? false : true;
+        } else {
+          this.products[i].openButton = true;
+        }
       }
     }
 
@@ -136,7 +136,9 @@ export default {
   },
   methods: {
     async addProduct(item) {
-      if (!this.$auth.user) window.location.href = "/login";
+      if (!this.$auth.user) {
+        window.location.href = "/login";
+      }
 
       try {
         await CartService.create({
