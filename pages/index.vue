@@ -74,6 +74,7 @@
 
 <script>
 import _filter from "lodash/filter";
+import ProductService from '@/services/apis/Product'
 
 export default {
   data() {
@@ -121,8 +122,11 @@ export default {
       filterList: [],
     };
   },
-  mounted() {
+  async mounted() {
     this.filterList = this.products;
+
+    const { data } = await ProductService.getAll({})
+    console.log(data)
   },
   watch: {
     filter: {
