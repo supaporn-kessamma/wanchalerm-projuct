@@ -1,8 +1,10 @@
 <template>
   <v-row class="px-4" align="center" justify="center">
     <v-col cols="12" align="right">
-      <v-btn color="green" class="white--text" @click="add">เพิ่ม</v-btn>
-      <v-btn color="red" class="white--text" to="/admin">ย้อนกลับ</v-btn>
+      <v-btn color="green" class="white--text" @click="add">บันทึก</v-btn>
+      <v-btn color="red" class="white--text" to="/admin/products"
+        >ย้อนกลับ</v-btn
+      >
     </v-col>
     <v-col cols="12">
       <v-text-field
@@ -31,32 +33,59 @@
         v-model="form.price"
       />
     </v-col>
+    <v-col cols="12">
+      <v-autocomplete
+        dense
+        hide-details
+        outlined
+        :items="types"
+        item-text="name"
+        label="ชนิดสินค้า"
+        v-model="form.type"
+      />
+    </v-col>
   </v-row>
 </template>
 
 <script>
 export default {
+  asyncData({ route }) {
+    const { item } = route.query;
+    return {
+      item,
+    };
+  },
   data() {
     return {
       form: {
         name: "",
         price: 0,
         url: "",
+        type: "",
       },
+      types: [
+        { name: "เครื่องดื่ม" },
+        { name: "ยา" },
+        { name: "อาหาร" },
+        { name: "สมุนไพร" },
+        { name: "เครื่องดื่ม(ไม่มีแอลกอฮอล์)" },
+        { name: "เสื้อผ้า" },
+      ],
     };
   },
   methods: {
     add() {
       try {
         this.$swal.fire({
-          title: "เพิ่มสำเร็จ",
+          title: "สำเร็จ",
           icon: "success",
           confirmButtonText: "ตกลง",
         });
-        // this.$router.go(-1);
+        this.form = {};
+        this.$router.go(-1);
       } catch (error) {
         this.$swal.fire({
-          title: "เพิ่มไม่สำเร็จ",
+          title: "ไม่สำเร็จ",
           text: error.message,
           icon: "error",
           confirmButtonText: "ตกลง",

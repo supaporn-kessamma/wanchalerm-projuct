@@ -14,7 +14,7 @@
           <v-card elevation="2" max-width="230" class="pa-2">
             <v-row align="center" justify="center">
               <v-col cols="12">
-                <v-img :src="product.image" max-width="230" max-height="180" />
+                <v-img :src="product.img" max-width="230" max-height="180" />
               </v-col>
               <v-col cols="12" class="pt-0">
                 <div class="d-flex justify-space-between">
@@ -48,24 +48,24 @@
           <v-btn block @click="filterProduct(false)">ทั้งหมด</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block @click="filterProduct('drink')">เครื่องดื่ม</v-btn>
+          <v-btn block @click="filterProduct('เครื่องดื่ม')">เครื่องดื่ม</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block @click="filterProduct('drug')">ยา</v-btn>
+          <v-btn block @click="filterProduct('ยา')">ยา</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block @click="filterProduct('food')">อาหาร</v-btn>
+          <v-btn block @click="filterProduct('อาหาร')">อาหาร</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block @click="filterProduct('herb')">สมุนไพร</v-btn>
+          <v-btn block @click="filterProduct('สมุนไพร')">สมุนไพร</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block @click="filterProduct('noAlcohol')"
+          <v-btn block @click="filterProduct('เครื่องดื่ม(ไม่มีแอลกอฮอล์)')"
             >เครื่องดื่ม(ไม่มีแอลกอฮอล์)</v-btn
           >
         </v-col>
         <v-col cols="12">
-          <v-btn block @click="filterProduct('clothes')">เสื้อผ้า</v-btn>
+          <v-btn block @click="filterProduct('เสื้อผ้า')">เสื้อผ้า</v-btn>
         </v-col>
       </v-row>
     </v-col>
@@ -74,77 +74,51 @@
 
 <script>
 import _filter from "lodash/filter";
-import ProductService from '@/services/apis/Product'
+import ProductService from "@/services/apis/Product";
+import CartService from "@/services/apis/Cart";
 
 export default {
   data() {
     return {
       length: 0,
-      products: [
-        {
-          image:
-            "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้ม (อาหาร)",
-          price: 100,
-          amout: 1,
-          total: 100,
-          category: "food",
-        },
-        {
-          image:
-            "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้มแขก (อาหาร)",
-          price: 100,
-          amout: 1,
-          total: 100,
-          category: "food",
-        },
-        {
-          image:
-            "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้มเชื่อม (สมุนไพร)",
-          price: 100,
-          amout: 1,
-          total: 100,
-          category: "herb",
-        },
-        {
-          image:
-            "https://www.otoptoday.com/images/upload_img/products/otop_img_11568805905.jpg",
-          name: "ส้มกล่อง (เครื่องดื่ม)",
-          price: 100,
-          amout: 1,
-          total: 100,
-          category: "drink",
-        },
-      ],
+      products: [],
       filter: "",
       filterList: [],
     };
   },
   async mounted() {
-    this.filterList = this.products;
+    const { data } = await ProductService.getAll({});
+    this.products = data;
 
+<<<<<<< HEAD
     const { data } = await ProductService.getAll({})
+=======
+    this.filterList = this.products;
+>>>>>>> 5bdc1f0a6b3a95854ab71599931b613bbe4c9119
   },
   watch: {
     filter: {
       handler() {
-        this.filterList = _filter(this.products, ["category", this.filter]);
+        this.filterList = _filter(this.products, ["type", this.filter]);
         if (this.filter) {
-          console.log("this.filter", typeof this.filter);
-          this.filterList = _filter(this.products, ["category", this.filter]);
+          this.filterList = _filter(this.products, ["type", this.filter]);
         } else {
-          console.log("this.filter", this.filter);
-          this.filterList = _filter(this.products, "category");
+          this.filterList = _filter(this.products, "type");
         }
       },
       deep: true,
     },
   },
   methods: {
-    addProduct(item) {
-      console.log(item);
+    async addProduct(item) {
+      try {
+        await CartService.create({ product_id: item.id, amount: 1 });
+        console.log(item);
+
+        location.reload();
+      } catch (e) {
+        console.log(e);
+      }
     },
     filterProduct(text) {
       this.filter = text;

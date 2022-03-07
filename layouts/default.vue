@@ -28,9 +28,11 @@
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-spacer></v-spacer>
 
-      <v-btn icon>
-        <v-icon>mdi-cart-outline</v-icon>
-      </v-btn>
+      <v-badge bordered color="red" :content="count" :value="count">
+        <v-btn icon to="/cart">
+          <v-icon>mdi-cart-outline</v-icon>
+        </v-btn>
+      </v-badge>
     </v-app-bar>
 
     <v-main>
@@ -53,6 +55,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      count: 0,
       text: "เข้าสู่ระบบ",
       items: [
         {
@@ -76,6 +79,11 @@ export default {
           icon: "mdi-cart-outline",
           title: "ตะกร้าสินค้า",
           to: "/cart",
+        },
+        {
+          icon: "mdi-cog",
+          title: "จัดการข้อมูล",
+          to: "/admin",
         },
       ],
       miniVariant: false,
