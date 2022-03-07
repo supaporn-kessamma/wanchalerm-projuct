@@ -71,9 +71,7 @@
           <v-btn block @click="filterProduct('สมุนไพร')">สมุนไพร</v-btn>
         </v-col>
         <v-col cols="12">
-          <v-btn block @click="filterProduct('เครื่องดื่ม(ไม่มีแอลกอฮอล์)')"
-            >เครื่องดื่ม(ไม่มีแอลกอฮอล์)</v-btn
-          >
+          <v-btn block @click="filterProduct('ของใช้')">ของใช้</v-btn>
         </v-col>
         <v-col cols="12">
           <v-btn block @click="filterProduct('เสื้อผ้า')">เสื้อผ้า</v-btn>
