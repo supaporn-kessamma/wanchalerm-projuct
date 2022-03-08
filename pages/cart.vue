@@ -266,13 +266,7 @@ export default {
         const { data } = await OrderService.create({
           user_id: this.$auth.user.id,
           paid: this.sumTotal,
-          address:
-            this.form.address +
-            this.form.city +
-            this.form.province +
-            this.form.country +
-            this.form.zip +
-            this.form.tel,
+          address: `${this.form.address} ${this.form.city} ${this.form.province} ${this.form.country} ${this.form.zip} ${this.form.tel}`,
           status: "สำเร็จ",
         });
         for (const i in this.items) {
