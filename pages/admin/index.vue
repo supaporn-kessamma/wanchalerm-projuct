@@ -1,7 +1,8 @@
 <template>
   <div>
     <v-btn class="mr-4" x-large to="/admin/orders">ออร์เดอร์สินค้า</v-btn>
-    <v-btn x-large to="/admin/products">สินค้า</v-btn>
+    <v-btn class="mr-4" x-large to="/admin/products">สินค้า</v-btn>
+    <v-btn x-large to="/admin/users">ผู้ใช้งาน</v-btn>
   </div>
 </template>
 

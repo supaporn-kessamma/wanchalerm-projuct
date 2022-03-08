@@ -26,7 +26,11 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-spacer></v-spacer>
+      <v-spacer
+        ><v-toolbar-title class="text-center"
+          >OTOP LOPBURI</v-toolbar-title
+        ></v-spacer
+      >
 
       <v-badge bordered color="red" :content="count" :value="count">
         <v-btn icon to="/cart">
